@@ -65,13 +65,13 @@ export default function AdminPage() {
       headers.join(";"),
       ...reservations.map((res) =>
         [
-          `"${res.prenom.replace(/"/g, '""')}"`,
-          `"${res.nom.replace(/"/g, '""')}"`,
-          `"${res.email.replace(/"/g, '""')}"`,
-          `"${res.telephone.replace(/"/g, '""')}"`,
-          `"${res.faculte.replace(/"/g, '""')}"`,
-          `"${res.filiere.replace(/"/g, '""')}"`,
-          `"${res.niveau.replace(/"/g, '""')}"`,
+          `"${(res.prenom || "").replace(/"/g, '""')}"`,
+          `"${(res.nom || "").replace(/"/g, '""')}"`,
+          `"${(res.email || "").replace(/"/g, '""')}"`,
+          `"${(res.telephone || "").replace(/"/g, '""')}"`,
+          `"${(res.faculte || "").toUpperCase().replace(/"/g, '""')}"`,
+          `"${(res.filiere || "").replace(/"/g, '""')}"`,
+          `"${(res.niveau || "").replace(/"/g, '""')}"`,
           `"${new Date(res.createdAt).toLocaleString()}"`,
         ].join(";")
       ),
@@ -94,12 +94,13 @@ export default function AdminPage() {
   // Fonction de filtrage
   const filteredReservations = reservations.filter((res) => {
     if (activeFilter === "all") return true;
-    if (activeFilter === "FST") return res.faculte === "FST";
-    if (activeFilter === "ISI") return res.faculte === "ISI";
-    if (activeFilter === "ENIT") return res.faculte === "ENIT";
-    if (activeFilter === "INSAT") return res.faculte === "INSAT";
-    if (activeFilter === "ESPRIT") return res.faculte === "ESPRIT";
-    if (activeFilter === "ENSIT") return res.faculte === "ENSIT";
+    if (activeFilter === "FST") return res.faculte.toUpperCase() === "FST";
+    if (activeFilter === "ISI") return res.faculte.toUpperCase() === "ISI";
+    if (activeFilter === "ENIT") return res.faculte.toUpperCase() === "ENIT";
+    if (activeFilter === "INSAT") return res.faculte.toUpperCase() === "INSAT";
+    if (activeFilter === "ESPRIT")
+      return res.faculte.toUpperCase() === "ESPRIT";
+    if (activeFilter === "ENSIT") return res.faculte.toUpperCase() === "ENSIT";
     return true;
   });
 
@@ -312,7 +313,7 @@ export default function AdminPage() {
                         <td className="py-3 px-4">
                           <span
                             className={`px-2 py-1 text-xs rounded-full ${
-                              res.faculte === "Matin"
+                              res.faculte.toUpperCase() === "FST"
                                 ? "bg-blue-100 text-blue-800"
                                 : "bg-amber-100 text-amber-800"
                             }`}
@@ -345,21 +346,6 @@ export default function AdminPage() {
                 </tbody>
               </table>
             </div>
-
-            {/* Pagination (optionnelle) */}
-            {reservations.length > 0 && (
-              <div className="px-6 py-4 border-t flex justify-between items-center">
-                <div className="text-sm text-gray-500">
-                  Affichage de 1 à {reservations.length} sur{" "}
-                  {reservations.length} entrées
-                </div>
-                <div className="join">
-                  <button className="join-item btn btn-sm">«</button>
-                  <button className="join-item btn btn-sm btn-active">1</button>
-                  <button className="join-item btn btn-sm">»</button>
-                </div>
-              </div>
-            )}
           </div>
         )}
       </main>
