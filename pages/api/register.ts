@@ -4,9 +4,9 @@ import clientPromise from '../../lib/db';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { prenom, nom, email, filiere, niveau, session } = req.body;
+    const { prenom, nom, email, telephone, faculte, filiere, niveau } = req.body;
 
-    if (!prenom || !nom || !email || !filiere || !niveau || !session) {
+    if (!prenom || !nom || !email || !telephone || !faculte || !filiere || !niveau ) {
       return res.status(400).json({ message: 'Champs manquants' });
     }
 
@@ -19,9 +19,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         prenom,
         nom,
         email,
+        telephone,
+        faculte,
         filiere,
         niveau,
-        session,
         createdAt: new Date(),
       });
 
